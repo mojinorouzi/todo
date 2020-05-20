@@ -3,11 +3,18 @@ const Item =require("../models/items")
 
 const router = express.Router();
 //get requst
-router.get('/test' , (req , res , next)=>{
+router.get('/test' , async(req , res , next)=>{
+    try {
+        await Item.find({}).then((items)=>{
+            res.send(items);
+        })
+        
+    } catch (error) {
+        res.json(error)
+        
+    }
     
-    Item.find({}).then((items)=>{
-        res.send(items);
-    })
+    
     
    /*
    Item.geoNear(
@@ -21,9 +28,15 @@ router.get('/test' , (req , res , next)=>{
 // add item
 router.post('/test' ,async (req , res , next )=>{
     
-     Item.create(req.body).then((item)=>{
-         res.send(item);
-     }).catch(next);
+     try {
+        await Item.create(req.body).then((item)=>{
+            res.send(item);
+        }).catch(next);
+         
+     } catch (error) {
+         res.json(error)
+         
+     }
     /* //buttom code like top code for create table in db and save data
     var item = new Item(req.body);
     item.save();
@@ -32,17 +45,30 @@ router.post('/test' ,async (req , res , next )=>{
     
 });
 //update item
-router.put('/test/:id' , (req , res , next)=>{
-    Item.findOneAndUpdate({name : req.params.id} ,req.body).then((item)=>{
-        res.send(item);
-    });
+router.put('/test/:id' , async(req , res , next)=>{
+    try {
+        await Item.findOneAndUpdate({name : req.params.id} ,req.body).then((item)=>{
+            res.send(item);
+        });
+        
+    } catch (error) {
+        res.json(error)
+        
+    }
+    
     
 })
 // delete item
-router.delete('/test/:id' , (req , res , next)=>{
-    Item.findOneAndRemove({name : req.params.id}).then((item)=>{
-        res.send(item);
-    });
+router.delete('/test/:id' , async(req , res , next)=>{
+    try {
+        await Item.findOneAndRemove({name : req.params.id}).then((item)=>{
+            res.send(item);
+        });
+        
+    } catch (error) {
+        res.json(error)
+    }
+    
     
     
 })
